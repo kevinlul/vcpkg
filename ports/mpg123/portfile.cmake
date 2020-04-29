@@ -1,5 +1,3 @@
-vcpkg_fail_port_install(ON_ARCH "arm" ON_TARGET "UWP")
-
 set(MPG123_VERSION 1.25.8)
 set(MPG123_HASH f226317dddb07841a13753603fa13c0a867605a5a051626cb30d45cfba266d3d4296f5b8254f65b403bb5eef6addce1784ae8829b671a746854785cda1bad203)
 
@@ -16,6 +14,7 @@ elseif(VCPKG_TARGET_ARCHITECTURE STREQUAL "arm")
 elseif(VCPKG_TARGET_ARCHITECTURE STREQUAL "arm64")
    set(MPG123_ARCH ARM64)
    set(MPG123_CONFIGURATION _Generic)
+   set(MPG123_CROSS --host=aarch64-linux-gnu)
 else()
    message(FATAL_ERROR "unsupported architecture")
 endif()
@@ -97,7 +96,7 @@ elseif(VCPKG_CMAKE_SYSTEM_NAME STREQUAL "Darwin" OR VCPKG_CMAKE_SYSTEM_NAME STRE
     ################
     message(STATUS "Configuring ${TARGET_TRIPLET}-dbg")
     vcpkg_execute_required_process(
-        COMMAND "${SOURCE_PATH}/configure" --prefix=${SOURCE_PATH}/build/debug --enable-debug=yes --enable-static=yes --disable-dependency-tracking --with-default-audio=coreaudio --with-module-suffix=.so
+        COMMAND "${SOURCE_PATH}/configure" ${MPG123_CROSS} --prefix=${SOURCE_PATH}/build/debug --enable-debug=yes --enable-static=yes --disable-dependency-tracking --with-default-audio=coreaudio --with-module-suffix=.so
         WORKING_DIRECTORY ${SOURCE_PATH}
         LOGNAME config-${TARGET_TRIPLET}-dbg
     )
@@ -121,7 +120,7 @@ elseif(VCPKG_CMAKE_SYSTEM_NAME STREQUAL "Darwin" OR VCPKG_CMAKE_SYSTEM_NAME STRE
         LOGNAME config-${TARGET_TRIPLET}-dbg
     )
     vcpkg_execute_required_process(
-        COMMAND "${SOURCE_PATH}/configure" --prefix=${SOURCE_PATH}/build/release --enable-static=yes --disable-dependency-tracking --with-default-audio=coreaudio --with-module-suffix=.so
+        COMMAND "${SOURCE_PATH}/configure" ${MPG123_CROSS} --prefix=${SOURCE_PATH}/build/release --enable-static=yes --disable-dependency-tracking --with-default-audio=coreaudio --with-module-suffix=.so
         WORKING_DIRECTORY ${SOURCE_PATH}
         LOGNAME config-${TARGET_TRIPLET}-rel
     )
